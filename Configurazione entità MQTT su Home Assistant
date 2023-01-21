@@ -1,4 +1,34 @@
 mqtt:
+  light:
+    - unique_id: "vantage_vid_64"
+      name: "Luce On/Off"
+      command_topic: "64/load/vantage/set"
+      state_topic: "64/load/vantage/status"
+      json_attributes_topic: "64/load/vantage/status"
+      json_attributes_template: "{{ value_json.attributes | tojson }}"
+      state_value_template: "{{ value_json.state }}"
+      
+    - unique_id: "vantage_vid_133"
+      name: "Luce dimmer"
+      command_topic: "133/load/vantage/set"
+      brightness_command_topic: "133/load/vantage/set"
+      state_topic: "133/load/vantage/status"
+      json_attributes_topic: "133/load/vantage/status"
+      brightness_state_topic: "133/load/vantage/status"
+      state_value_template: "{{ value_json.state }}"
+      brightness_value_template: "{{ value_json.brightness }}"
+      json_attributes_template: "{{ value_json.attributes | tojson }}"
+      on_command_type: 'brightness'
+      
+  switch:
+    - unique_id: "vantage_vid_63"
+      name: "Presa comandata"
+      command_topic: "63/load/vantage/set"
+      state_topic: "63/load/vantage/status"
+      json_attributes_topic: "63/load/vantage/status"
+      json_attributes_template: "{{ value_json.attributes | tojson }}"
+      value_template: "{{ value_json.state }}"
+      
   binary_sensor:
     - unique_id: "status_connection_vantage_infusion"
       name: "Stato connessione"
@@ -6,7 +36,7 @@ mqtt:
       value_template: "{{ value_json.state }}"
       json_attributes_topic: "connection/vantage/status"
       json_attributes_template: "{{ value_json.attributes | tojson }}"
-      expire_after: 60
+      expire_after: 300
       device_class: connectivity
       
     - unique_id: "vantage_vid_21"
@@ -24,3 +54,13 @@ mqtt:
       json_attributes_topic: "470/variable/vantage/status"
       json_attributes_template: "{{ value_json.attributes | tojson }}"
       icon: mdi:shield
+      
+  sensor:
+    - unique_id: "vantage_vid_141"
+      name: "Sensore lux esterno"
+      state_topic: "141/sensor/vantage/status"
+      value_template: "{{ value_json.state }}"
+      json_attributes_topic: "141/sensor/vantage/status"
+      json_attributes_template: "{{ value_json.attributes | tojson }}"
+      device_class: illuminance
+      unit_of_measurement: "lx"
