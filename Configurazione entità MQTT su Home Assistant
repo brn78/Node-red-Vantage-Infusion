@@ -1,0 +1,26 @@
+mqtt:
+  binary_sensor:
+    - unique_id: "status_connection_vantage_infusion"
+      name: "Stato connessione"
+      state_topic: "connection/vantage/status"
+      value_template: "{{ value_json.state }}"
+      json_attributes_topic: "connection/vantage/status"
+      json_attributes_template: "{{ value_json.attributes | tojson }}"
+      expire_after: 60
+      device_class: connectivity
+      
+    - unique_id: "vantage_vid_21"
+      name: "Sensore presenza"
+      state_topic: "21/button/vantage/status"
+      value_template: "{{ value_json.state }}"
+      json_attributes_topic: "21/button/vantage/status"
+      json_attributes_template: "{{ value_json.attributes | tojson }}"
+      device_class: motion
+      
+    - unique_id: "vantage_vid_470"
+      name: "Variabile"
+      state_topic: "470/variable/vantage/status"
+      value_template: "{{ value_json.binary }}"
+      json_attributes_topic: "470/variable/vantage/status"
+      json_attributes_template: "{{ value_json.attributes | tojson }}"
+      icon: mdi:shield
