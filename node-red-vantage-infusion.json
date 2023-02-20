@@ -69,7 +69,7 @@
             {
                 "name": "load_sync",
                 "type": "bool",
-                "value": "true",
+                "value": "false",
                 "ui": {
                     "icon": "font-awesome/fa-exchange",
                     "label": {
@@ -98,7 +98,7 @@
             {
                 "name": "sensor_sync",
                 "type": "bool",
-                "value": "true",
+                "value": "false",
                 "ui": {
                     "icon": "font-awesome/fa-exchange",
                     "label": {
@@ -127,7 +127,7 @@
             {
                 "name": "variable_sync",
                 "type": "bool",
-                "value": "true",
+                "value": "false",
                 "ui": {
                     "icon": "font-awesome/fa-exchange",
                     "label": {
@@ -156,7 +156,7 @@
             {
                 "name": "blind_sync",
                 "type": "bool",
-                "value": "true",
+                "value": "false",
                 "ui": {
                     "icon": "font-awesome/fa-exchange",
                     "label": {
@@ -195,6 +195,78 @@
                 }
             },
             {
+                "name": "all_sync",
+                "type": "bool",
+                "value": "true",
+                "ui": {
+                    "icon": "font-awesome/fa-exchange",
+                    "label": {
+                        "en-US": "STATUS ALL"
+                    },
+                    "type": "checkbox"
+                }
+            },
+            {
+                "name": "task_sync",
+                "type": "bool",
+                "value": "false",
+                "ui": {
+                    "icon": "font-awesome/fa-exchange",
+                    "label": {
+                        "en-US": "STATUS TASK"
+                    },
+                    "type": "checkbox"
+                }
+            },
+            {
+                "name": "text_sync",
+                "type": "bool",
+                "value": "false",
+                "ui": {
+                    "icon": "font-awesome/fa-exchange",
+                    "label": {
+                        "en-US": "STATUS TEXT"
+                    },
+                    "type": "checkbox"
+                }
+            },
+            {
+                "name": "led_sync",
+                "type": "bool",
+                "value": "false",
+                "ui": {
+                    "icon": "font-awesome/fa-exchange",
+                    "label": {
+                        "en-US": "STATUS LED"
+                    },
+                    "type": "checkbox"
+                }
+            },
+            {
+                "name": "temp_sync",
+                "type": "bool",
+                "value": "false",
+                "ui": {
+                    "icon": "font-awesome/fa-exchange",
+                    "label": {
+                        "en-US": "STATUS TEMP"
+                    },
+                    "type": "checkbox"
+                }
+            },
+            {
+                "name": "slider_sync",
+                "type": "bool",
+                "value": "false",
+                "ui": {
+                    "icon": "font-awesome/fa-exchange",
+                    "label": {
+                        "en-US": "STATUS SLIDER"
+                    },
+                    "type": "checkbox"
+                }
+            },
+            {
                 "name": "watchdog",
                 "type": "bool",
                 "value": "true",
@@ -209,7 +281,7 @@
             {
                 "name": "debug",
                 "type": "bool",
-                "value": "true",
+                "value": "false",
                 "ui": {
                     "icon": "font-awesome/fa-bug",
                     "label": {
@@ -272,7 +344,7 @@
         "scope": [
             "bfdbf76173cac6be",
             "4552fd57150d1dbe",
-            "542ed55015b87207"
+            "c936c0dfeb10bce6"
         ],
         "x": 610,
         "y": 440,
@@ -449,7 +521,7 @@
         "type": "function",
         "z": "7ec2bb068e43779e",
         "name": "Host Command",
-        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 06/01/2023\n */\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//none, reset comunication\nnode.send(msg)\nif (env.get(\"debug\")) { node.log(msg.payload) }\n\n//load\nmsg.payload = \"STATUS LOAD\"\nnode.send(msg)\nif (env.get(\"debug\")) { node.log(msg.payload) }\n\n//button\nmsg.payload = \"STATUS BTN\"\nnode.send(msg)\nif (env.get(\"debug\")) { node.log(msg.payload) }\n\n//text\nmsg.payload = \"STATUS TEXT\"\nnode.send(msg)\nif (env.get(\"debug\")) { node.log(msg.payload) }\n\n//variable\nmsg.payload = \"STATUS VARIABLE\"\nnode.send(msg)\nif (env.get(\"debug\")) { node.log(msg.payload) }\n\n//blind\nmsg.payload = \"STATUS BLIND\"\nnode.send(msg)\nif (env.get(\"debug\")) { node.log(msg.payload) }\n\n//task\nmsg.payload = \"STATUS TASK\"\nnode.send(msg)\nif (env.get(\"debug\")) { node.log(msg.payload) }",
+        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 06/01/2023\n */\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nvar sync = false\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//none, reset comunication\nnode.send(msg)\nif (env.get(\"debug\")) { node.log(msg.payload) }\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nsync = env.get(\"all_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS ALL\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n    return null\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//load\nsync = env.get(\"load_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS LOAD\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//button\nsync = env.get(\"button_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS BTN\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//text\nsync = env.get(\"text_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS TEXT\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//variable\nsync = env.get(\"variable_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS VARIABLE\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//blind\nsync = env.get(\"blind_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS BLIND\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//task\nsync = env.get(\"task_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS TASK\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//slider\nsync = env.get(\"slider_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS SLIDER\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -506,7 +578,7 @@
         "id": "943d271275c8dac9",
         "type": "comment",
         "z": "7ec2bb068e43779e",
-        "name": "Aggiornato il 06/01/2023",
+        "name": "Aggiornato il 20/02/2023",
         "info": "",
         "x": 300,
         "y": 440,
@@ -532,7 +604,9 @@
         "x": 785,
         "y": 440,
         "wires": [
-            []
+            [
+                "777813c3ce2ab8de"
+            ]
         ],
         "l": false
     },
@@ -735,12 +809,53 @@
         "l": false
     },
     {
-        "id": "ea725dbd9eb8967f",
-        "type": "subflow:7ec2bb068e43779e",
-        "z": "99d9e9de.7f00a8",
+        "id": "c936c0dfeb10bce6",
+        "type": "function",
+        "z": "7ec2bb068e43779e",
+        "name": "Reset status node",
+        "func": "node.status({ fill: \"blue\", shape: \"ring\", text: \"Waiting data\" })\nreturn null",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "777813c3ce2ab8de",
+        "type": "trigger",
+        "z": "7ec2bb068e43779e",
         "name": "",
-        "x": 300,
-        "y": 310,
+        "op1": "",
+        "op2": "0",
+        "op1type": "nul",
+        "op2type": "str",
+        "duration": "10",
+        "extend": true,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 785,
+        "y": 500,
+        "wires": [
+            [
+                "c936c0dfeb10bce6"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "89f8cea7c6916b62",
+        "type": "subflow:7ec2bb068e43779e",
+        "z": "6287171c991959fa",
+        "name": "",
+        "x": 350,
+        "y": 400,
         "wires": [
             [],
             []
