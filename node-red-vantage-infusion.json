@@ -28,8 +28,16 @@
                 "y": 190,
                 "wires": [
                     {
-                        "id": "6754d9766e396e81",
+                        "id": "3c77ec77cc54b57d",
                         "port": 0
+                    },
+                    {
+                        "id": "2e67021b6c114fff",
+                        "port": 0
+                    },
+                    {
+                        "id": "49453984e91a06f2",
+                        "port": 1
                     }
                 ]
             },
@@ -67,18 +75,6 @@
                 }
             },
             {
-                "name": "load_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "Synchronize loads (lights, dimmers)"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
                 "name": "sensor",
                 "type": "str",
                 "value": "0",
@@ -93,18 +89,6 @@
                             "str"
                         ]
                     }
-                }
-            },
-            {
-                "name": "sensor_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "Synchronize sensors (light, wind)"
-                    },
-                    "type": "checkbox"
                 }
             },
             {
@@ -125,18 +109,6 @@
                 }
             },
             {
-                "name": "variable_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "Synchronize variables"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
                 "name": "blind",
                 "type": "str",
                 "value": "0",
@@ -151,18 +123,6 @@
                             "str"
                         ]
                     }
-                }
-            },
-            {
-                "name": "blind_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "Synchronize automations (shutters, covers, blinds)"
-                    },
-                    "type": "checkbox"
                 }
             },
             {
@@ -183,18 +143,6 @@
                 }
             },
             {
-                "name": "task_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "Synchronize tasks"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
                 "name": "buttons_string",
                 "type": "str",
                 "value": "0",
@@ -209,78 +157,6 @@
                             "str"
                         ]
                     }
-                }
-            },
-            {
-                "name": "button_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "Reset state of contacts and buttons"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
-                "name": "all_sync",
-                "type": "bool",
-                "value": "true",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "STATUS ALL"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
-                "name": "text_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "STATUS TEXT"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
-                "name": "led_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "STATUS LED"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
-                "name": "temp_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "STATUS TEMP"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
-                "name": "slider_sync",
-                "type": "bool",
-                "value": "false",
-                "ui": {
-                    "icon": "font-awesome/fa-exchange",
-                    "label": {
-                        "en-US": "STATUS SLIDER"
-                    },
-                    "type": "checkbox"
                 }
             },
             {
@@ -341,7 +217,7 @@
         "type": "function",
         "z": "7ec2bb068e43779e",
         "name": "Vantage response",
-        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 28/07/2022\n */\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//messaggi topic non passano\nif (msg.topic) return null\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nvar data = []\nvar response = null\nvar func = new String\nvar vid = 0\nvar debug_text = msg.payload\nvar vantage_version = flow.get(\"version\")\nconst SPACE = ' '\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nconst MANUFACTURER = flow.get(\"manufacturer\")\nconst POWERED_BY = flow.get(\"powered_by\")\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\nconst TOPIC_BUTTON = \"/button/vantage/status\"\nconst TOPIC_LOAD = \"/load/vantage/status\"\nconst TOPIC_BLIND = \"/blind/vantage/status\"\nconst TOPIC_VARIABLE = \"/variable/vantage/status\"\nconst TOPIC_SENSOR = \"/sensor/vantage/status\"\nconst TOPIC_TASK = \"/task/vantage/status\"\n///////////////////////////////////////////////////////////////////////////////\nconst TOPIC_VERSION = \"version/vantage/status\"\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage General Function\n * @param {string} state Stato aggiornato\n * @param {string} topic Topic da inviare\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendUpdate(state, topic, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${topic}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Sensor Function\n * @param {string} state Stato aggiornato\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendSensorUpdate(state, retain = true) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_SENSOR}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Button Function\n * @param {string} state Stato del pulsante\n * @param {string} trigger Trigger di aggiornamento stato\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendButtonUpdate(state, trigger, retain = true) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.trigger = trigger\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.trigger = trigger\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_BUTTON}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Load Function\n * @param {string} state Stato del carico\n * @param {string} brightness Luminosità del carico\n * @param {string} fade Livello dell'effetto\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendLoadUpdate(state, brightness, fade, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.brightness = brightness\n    msg.payload.fade = fade\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state + ' | ' + brightness + ' | ' + fade\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.brightness = brightness\n    msg.payload.attributes.fade = fade\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_LOAD}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Task Function\n * @param {string} state Stato task\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendTaskUpdate(state, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_TASK}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Blind Function\n * @param {string} state Stato della serranda\n * @param {string} position Posizione della serranda\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendBlindUpdate(state, position, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.position = position\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state + ' | ' + position\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.state = state\n    msg.payload.attributes.position = position\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_BLIND}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage General Function\n * @param {object} state Stato aggiornato\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendVariableUpdate(state, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state[0]\n    msg.payload.binary = state[1]\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state[0] + \" | \" + state[1]\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_VARIABLE}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//status node\nif (msg.payload == \"reset\") {\n    node.status({ fill: \"blue\", shape: \"ring\", text: \"Waiting data\" })\n    return null\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//il primo match + insensitive case\nString.prototype.IsThis = function (/** @type {string | RegExp} */ x) {\n    let re = new RegExp(x, 'i')\n    return (this.search(re) === -1) ? false : true\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//response\nif (msg.payload) {\n    response = msg.payload\n    data = (msg.payload.substr(2)).split(\" \")\n    func = data[0]\n    vid = parseInt(data[1])\n\n    if (func.IsThis('BTN')) {\n        //data extraction\n        const TRIGGER = data[2]\n        const STATE = (data[2] == \"RELEASE\") ? \"OFF\" : \"ON\"\n        //output\n        func = \"Button Function\"\n        debug_text = `Button ${vid} has changed to ${STATE} with trigger ${TRIGGER}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendButtonUpdate(STATE, TRIGGER)\n    } else if (func.IsThis('LOAD')) {\n        //data extraction\n        const STATE = (parseInt(data[2]) == 0) ? \"OFF\" : \"ON\"\n        const BRIGHTNESS = Math.round(parseInt(data[2]) * 2.55)\n        const FADE = (data[3] === undefined || data[3] === null) ? 0 : parseInt(data[3])\n        //output\n        func = \"Load Function\"\n        debug_text = `Load ${vid} has changed to ${STATE} with brightness ${parseInt(data[2])}%`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendLoadUpdate(STATE, BRIGHTNESS, FADE)\n    } else if (func.IsThis('TASK')) {\n        //data extraction\n        const STATE = (parseInt(data[2]) == 0) ? \"OFF\" : \"ON\"\n        //output\n        func = \"Task Function\"\n        debug_text = `Task ${vid} has changed to ${STATE}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendTaskUpdate(STATE)\n    } else if (func.IsThis('BLIND')) {\n        //data extraction\n        const STATE = (data[2] && parseInt(data[2]) == 0) ? \"closed\" : \"open\"\n        const POSITION = data[2] ? Math.round(parseInt(data[2])) : 0\n        //output\n        func = \"Blind Function\"\n        debug_text = `Blind ${vid} has changed to ${STATE} with position ${POSITION}%`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendBlindUpdate(STATE, POSITION)\n    } else if (func.IsThis('VARIABLE')) {\n        //data extraction\n        let value = []\n        data = msg.payload.substr(2)\n        data = data.replace(`${func}${SPACE}${vid}${SPACE}`, \"\")\n\n        //rimuovo \"\"\n        if (data.startsWith('\"') && data.endsWith('\"')) {\n            data = data.substring(data.indexOf('\"') + 1, data.lastIndexOf('\"')).trim()\n        }\n\n        //state\n        value.push(data)\n\n        //binary\n        if (!isNaN(data)) {\n            value.push((parseInt(data) <= 0) ? \"OFF\" : \"ON\")\n        } else if (data.toLowerCase() == 'on' || data.toLowerCase() == 'off') {\n            value.push(data.toUpperCase())\n        } else {\n            value.push(data)\n        }\n\n        //output\n        func = \"Variable Function\"\n        debug_text = `Variable ${vid} has changed to ${value[0]} | ${value[1]}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendVariableUpdate(value)\n    } else if (func.IsThis('SENSOR')) {\n        //data extraction\n        const STATE = data[2]\n        //output\n        func = \"Sensor Function\"\n        debug_text = `Sensor ${vid} has changed to ${STATE}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendSensorUpdate(STATE)\n    } else if (func.IsThis('VERSION')) {\n        //data extraction\n        const STATE = data[1]\n        vantage_version = STATE\n        flow.set(\"version\", vantage_version)\n        vid = \"\"\n        //output\n        func = \"Controller Version\"\n        debug_text = `Controller Version ${STATE}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendUpdate(STATE, TOPIC_VERSION)\n    } else {\n        node.status({ fill: \"red\", shape: \"dot\", text: debug_text })\n    }\n}\n\nreturn null",
+        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 14/04/2023\n */\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//messaggi topic non passano\nif (msg.topic) return null\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nvar data = []\nvar response = null\nvar func = new String\nvar vid = 0\nvar debug_text = msg.payload\nvar vantage_version = flow.get(\"version\")\nconst SPACE = ' '\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nconst MANUFACTURER = flow.get(\"manufacturer\")\nconst POWERED_BY = flow.get(\"powered_by\")\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nconst TOPIC_BUTTON = \"/button/vantage/status\"\nconst TOPIC_LOAD = \"/load/vantage/status\"\nconst TOPIC_BLIND = \"/blind/vantage/status\"\nconst TOPIC_VARIABLE = \"/variable/vantage/status\"\nconst TOPIC_SENSOR = \"/sensor/vantage/status\"\nconst TOPIC_TASK = \"/task/vantage/status\"\nconst TOPIC_VERSION = \"version/vantage/status\"\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage General Function\n * @param {string} state Stato aggiornato\n * @param {string} topic Topic da inviare\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendUpdate(state, topic, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${topic}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Sensor Function\n * @param {string} state Stato aggiornato\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendSensorUpdate(state, retain = true) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_SENSOR}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Button Function\n * @param {string} state Stato del pulsante\n * @param {string} trigger Trigger di aggiornamento stato\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendButtonUpdate(state, trigger, retain = true) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.trigger = trigger\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.trigger = trigger\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_BUTTON}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Load Function\n * @param {string} state Stato del carico\n * @param {string} brightness Luminosità del carico\n * @param {string} fade Livello dell'effetto\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendLoadUpdate(state, brightness, fade, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.brightness = brightness\n    msg.payload.fade = fade\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state + ' | ' + brightness + ' | ' + fade\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.brightness = brightness\n    msg.payload.attributes.fade = fade\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_LOAD}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Task Function\n * @param {string} state Stato task\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendTaskUpdate(state, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_TASK}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage Blind Function\n * @param {string} state Stato della serranda\n * @param {string} position Posizione della serranda\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendBlindUpdate(state, position, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state\n    msg.payload.position = position\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state + ' | ' + position\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.state = state\n    msg.payload.attributes.position = position\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_BLIND}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Vantage General Function\n * @param {object} state Stato aggiornato\n * @param {boolean} retain Impostazione MQTT\n */\nfunction SendVariableUpdate(state, retain = false) {\n    msg.payload = {}\n    msg.payload.state = state[0]\n    msg.payload.binary = state[1]\n    msg.payload.attributes = {}\n    msg.payload.attributes.manufacturer = MANUFACTURER\n    msg.payload.attributes.response = response\n    msg.payload.attributes.data = state[0] + \" | \" + state[1]\n    msg.payload.attributes.powered_by = POWERED_BY\n    msg.payload.attributes.vid = vid\n    msg.payload.attributes.function = func\n    msg.payload.attributes.controller_version = vantage_version\n    //conversione payload a JSON String\n    msg.payload = JSON.stringify(msg.payload)\n    //impostazioni MQTT\n    msg.qos = 0\n    msg.retain = retain\n    msg.topic = `${vid}${TOPIC_VARIABLE}`\n    //output\n    node.send(msg)\n    //debug\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//status node\nif (msg.payload == \"reset\") {\n    node.status({ fill: \"blue\", shape: \"ring\", text: \"Waiting data\" })\n    return null\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//il primo match + insensitive case\nString.prototype.IsThis = function (/** @type {string | RegExp} */ x) {\n    let re = new RegExp(x, 'i')\n    return (this.search(re) === -1) ? false : true\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//response\nif (msg.payload) {\n    response = msg.payload\n    data = (msg.payload.substr(2)).split(\" \")\n    func = data[0]\n    vid = parseInt(data[1])\n\n    if (func.IsThis('BTN')) {\n        //data extraction\n        const TRIGGER = data[2]\n        const STATE = (data[2] == \"RELEASE\") ? \"OFF\" : \"ON\"\n        //output\n        func = \"Button Function\"\n        debug_text = `Button ${vid} has changed to ${STATE} with trigger ${TRIGGER}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendButtonUpdate(STATE, TRIGGER)\n    } else if (func.IsThis('LOAD')) {\n        //data extraction\n        const STATE = (parseInt(data[2]) == 0) ? \"OFF\" : \"ON\"\n        const BRIGHTNESS = Math.round(parseInt(data[2]) * 2.55)\n        const FADE = (data[3] === undefined || data[3] === null) ? 0 : parseInt(data[3])\n        //output\n        func = \"Load Function\"\n        debug_text = `Load ${vid} has changed to ${STATE} with brightness ${parseInt(data[2])}%`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendLoadUpdate(STATE, BRIGHTNESS, FADE)\n    } else if (func.IsThis('TASK')) {\n        //data extraction\n        const STATE = (parseInt(data[2]) == 0) ? \"OFF\" : \"ON\"\n        //output\n        func = \"Task Function\"\n        debug_text = `Task ${vid} has changed to ${STATE}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendTaskUpdate(STATE)\n    } else if (func.IsThis('BLIND')) {\n        //data extraction\n        const STATE = (data[2] && parseInt(data[2]) == 0) ? \"closed\" : \"open\"\n        const POSITION = data[2] ? Math.round(parseInt(data[2])) : 0\n        //output\n        func = \"Blind Function\"\n        debug_text = `Blind ${vid} has changed to ${STATE} with position ${POSITION}%`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendBlindUpdate(STATE, POSITION)\n    } else if (func.IsThis('VARIABLE')) {\n        //data extraction\n        let value = []\n        data = msg.payload.substr(2)\n        data = data.replace(`${func}${SPACE}${vid}${SPACE}`, \"\")\n\n        //rimuovo \"\"\n        if (data.startsWith('\"') && data.endsWith('\"')) {\n            data = data.substring(data.indexOf('\"') + 1, data.lastIndexOf('\"')).trim()\n        }\n\n        //state\n        value.push(data)\n\n        //binary\n        if (!isNaN(data)) {\n            value.push((parseInt(data) <= 0) ? \"OFF\" : \"ON\")\n        } else if (data.toLowerCase() == 'on' || data.toLowerCase() == 'off') {\n            value.push(data.toUpperCase())\n        } else {\n            value.push(data)\n        }\n\n        //output\n        func = \"Variable Function\"\n        debug_text = `Variable ${vid} has changed to ${value[0]} | ${value[1]}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendVariableUpdate(value)\n    } else if (func.IsThis('SENSOR')) {\n        //data extraction\n        const STATE = data[2]\n        //output\n        func = \"Sensor Function\"\n        debug_text = `Sensor ${vid} has changed to ${STATE}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendSensorUpdate(STATE)\n    } else if (func.IsThis('VERSION')) {\n        //data extraction\n        const STATE = data[1]\n        vantage_version = STATE\n        flow.set(\"version\", vantage_version)\n        vid = \"\"\n        //output\n        func = \"Controller Version\"\n        debug_text = `Controller Version ${STATE}`\n        node.status({ fill: \"green\", shape: \"dot\", text: debug_text })\n        SendUpdate(STATE, TOPIC_VERSION)\n    } else {\n        node.status({ fill: \"red\", shape: \"dot\", text: debug_text })\n    }\n}\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is started.\nflow.set(\"manufacturer\", \"Vantage Controls © 2016\")\nflow.set(\"powered_by\", \"Bruno Leonardi © 2023\")\nflow.set(\"version\", \"unknown\")\n\nnode.status({ fill: \"blue\", shape: \"ring\", text: \"Initialized\" })",
@@ -477,7 +353,7 @@
         "repeat": "60",
         "crontab": "",
         "once": true,
-        "onceDelay": "5",
+        "onceDelay": "10",
         "topic": "",
         "payload": "VERSION",
         "payloadType": "str",
@@ -494,7 +370,7 @@
         "type": "function",
         "z": "7ec2bb068e43779e",
         "name": "Sync request",
-        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 02/08/2022\n */\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//testo per il debug\nvar debug_text = ''\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Invia un richiesta a Vantage\n * @param {string} command Comando da inviare\n */\nfunction SendRequest(command) {\n    node.send({ payload: command })\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//controllo connessione\nif (msg.payload == 'VERSION') {\n    if (env.get(\"watchdog\")) {\n        debug_text = `Watchdog connection send a version request`\n        SendRequest(\"VERSION\")\n    }\n    return null\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//sync e array\nvar sync = false\nconst TYPE = msg.payload\nvar array = []\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//log\nif (env.get(\"debug\")) { node.log('Start synchronization') }\n\n//load sync\nsync = env.get(\"load_sync\") || false\n\nif (sync && (TYPE == 'SYNC' || TYPE == 'SYNC_LOAD')) {\n    array = (env.get(\"load\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Load vid ${array[i]} send request`\n            SendRequest(`GETLOAD ${array[i]}`)\n        }\n    }\n    sync = false\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//blind sync\nsync = env.get(\"blind_sync\") || false\n\nif (sync && (TYPE == 'SYNC' || TYPE == 'SYNC_BLIND')) {\n    array = (env.get(\"blind\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Load vid ${array[i]} send request`\n            SendRequest(`GETBLIND ${array[i]}`)\n        }\n    }\n    sync = false\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//sensor sync\nsync = env.get(\"sensor_sync\") || false\n\nif (sync && (TYPE == 'SYNC' || TYPE == 'SYNC_SENSOR')) {\n    array = (env.get(\"sensor\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Sensor vid ${array[i]} send request`\n            SendRequest(`GETSENSOR ${array[i]}`)\n        }\n    }\n    sync = false\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//variable sync\nsync = env.get(\"variable_sync\") || false\n\nif (sync && (TYPE == 'SYNC' || TYPE == 'SYNC_VARIABLE')) {\n    array = (env.get(\"variable\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Variable vid ${array[i]} send request`\n            SendRequest(`GETVARIABLE ${array[i]}`)\n        }\n    }\n    sync = false\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//task sync\nsync = env.get(\"task_sync\") || false\n\nif (sync && (TYPE == 'SYNC' || TYPE == 'SYNC_TASK')) {\n    array = (env.get(\"task\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Task vid ${array[i]} send request`\n            SendRequest(`GETTASK ${array[i]}`)\n        }\n    }\n    sync = false\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nreturn null",
+        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 14/04/2023\n */\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//testo per il debug\nvar debug_text = ''\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Invia un richiesta a Vantage\n * @param {string} command Comando da inviare\n */\nfunction SendRequest(command) {\n    node.send({ payload: command })\n    if (env.get(\"debug\")) { node.log(debug_text) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//controllo connessione\nif (msg.payload == 'VERSION') {\n    if (env.get(\"watchdog\")) {\n        debug_text = `Watchdog connection send a version request`\n        SendRequest(\"VERSION\")\n    }\n    return null\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////\n\nconst TYPE = msg.payload\nvar array = []\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nif (env.get(\"debug\")) { node.log('Start synchronization') }\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//load sync\nif (TYPE == 'SYNC' || TYPE == 'SYNC_LOAD') {\n    array = (env.get(\"load\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Load vid ${array[i]} send request`\n            SendRequest(`GETLOAD ${array[i]}`)\n        }\n    }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//blind sync\nif (TYPE == 'SYNC' || TYPE == 'SYNC_BLIND') {\n    array = (env.get(\"blind\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Load vid ${array[i]} send request`\n            SendRequest(`GETBLIND ${array[i]}`)\n        }\n    }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//sensor sync\nif (TYPE == 'SYNC' || TYPE == 'SYNC_SENSOR') {\n    array = (env.get(\"sensor\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Sensor vid ${array[i]} send request`\n            SendRequest(`GETSENSOR ${array[i]}`)\n        }\n    }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//variable sync\nif (TYPE == 'SYNC' || TYPE == 'SYNC_VARIABLE') {\n    array = (env.get(\"variable\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Variable vid ${array[i]} send request`\n            SendRequest(`GETVARIABLE ${array[i]}`)\n        }\n    }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//task sync\nif (TYPE == 'SYNC' || TYPE == 'SYNC_TASK') {\n    array = (env.get(\"task\")).split(\",\")\n    for (let i = 0; i < array.length; i++) {\n        if (parseInt(array[i]) > 0) {\n            debug_text = `Task vid ${array[i]} send request`\n            SendRequest(`GETTASK ${array[i]}`)\n        }\n    }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -503,53 +379,30 @@
         "x": 600,
         "y": 190,
         "wires": [
-            [
-                "6754d9766e396e81"
-            ]
+            []
         ]
     },
     {
         "id": "3c77ec77cc54b57d",
         "type": "inject",
         "z": "7ec2bb068e43779e",
-        "name": "Startup + 1h",
+        "name": "STATUS ALL",
         "props": [
             {
                 "p": "payload"
             }
         ],
-        "repeat": "3600",
+        "repeat": "300",
         "crontab": "",
         "once": true,
-        "onceDelay": "1",
+        "onceDelay": "5",
         "topic": "",
-        "payload": "STATUS NONE",
+        "payload": "STATUS ALL",
         "payloadType": "str",
-        "x": 330,
-        "y": 40,
-        "wires": [
-            [
-                "d9ac8c90f14df475"
-            ]
-        ]
-    },
-    {
-        "id": "d9ac8c90f14df475",
-        "type": "function",
-        "z": "7ec2bb068e43779e",
-        "name": "Host Command",
-        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 06/01/2023\n */\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nvar sync = false\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//none, reset comunication\nnode.send(msg)\nif (env.get(\"debug\")) { node.log(msg.payload) }\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nsync = env.get(\"all_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS ALL\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n    return null\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//load\nsync = env.get(\"load_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS LOAD\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//button\nsync = env.get(\"button_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS BTN\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//text\nsync = env.get(\"text_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS TEXT\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//variable\nsync = env.get(\"variable_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS VARIABLE\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//blind\nsync = env.get(\"blind_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS BLIND\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//task\nsync = env.get(\"task_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS TASK\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//slider\nsync = env.get(\"slider_sync\") || false\nif (sync) {\n    msg.payload = \"STATUS SLIDER\"\n    node.send(msg)\n    if (env.get(\"debug\")) { node.log(msg.payload) }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nreturn null",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
         "x": 590,
         "y": 90,
         "wires": [
-            [
-                "6754d9766e396e81"
-            ]
+            []
         ]
     },
     {
@@ -557,7 +410,7 @@
         "type": "function",
         "z": "7ec2bb068e43779e",
         "name": "Button reset",
-        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 06/01/2023\n */\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n/**\n * Invia il comando a Vantage\n * @param {string} command Comando da inviare\n */\nfunction SendPayload(command) {\n    node.send({ payload: command })\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//abilitazione sincronizzazione\nvar button_sync = env.get(\"button_sync\")\n//numero di vid buttons\nvar buttons_string = env.get(\"buttons_string\").trim()\n//array di buttons_string\nvar buttons = buttons_string.split(\",\")\n//testo di debug\nvar debug_text = null\n\n//sincronizza i buttons\nif (button_sync && buttons.length > 0) {\n    for (let i = 0; i < buttons.length; i++) {\n        const button = parseInt(buttons[i])\n        if (button > 0) {\n            SendPayload(`X:BTN ${button} RELEASE`)\n            debug_text = `Button vid ${button} reset state`\n            if (env.get(\"debug\")) { node.log(debug_text) }\n        }\n    }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nreturn null",
+        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 14/04/2023\n */\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//numero di vid buttons\nvar buttons_string = env.get(\"buttons_string\").trim()\n//array di buttons_string\nvar buttons = buttons_string.split(\",\")\n//testo di debug\nvar debug_text = null\n\n//sincronizza i buttons\nif (buttons.length > 0) {\n    for (let i = 0; i < buttons.length; i++) {\n        const button = parseInt(buttons[i])\n        if (button > 0) {\n            node.send({ payload: `X:BTN ${button} RELEASE` })\n            debug_text = `Button vid ${button} reset state`\n            if (env.get(\"debug\")) { node.log(debug_text) }\n        }\n    }\n}\n\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\nreturn null",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -663,7 +516,7 @@
         "type": "function",
         "z": "7ec2bb068e43779e",
         "name": "Vantage request",
-        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 06/01/2023\n */\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//messaggi obbligatori\nif (!msg.topic) return null\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nconst ALL_SYNC = msg.topic.endsWith(\"all/vantage/sync\")\nconst LOAD_SYNC = msg.topic.endsWith(\"/load/vantage/sync\")\nconst BLIND_SYNC = msg.topic.endsWith(\"/blind/vantage/sync\")\nconst SENSOR_SYNC = msg.topic.endsWith(\"/sensor/vantage/sync\")\nconst VARIABLE_SYNC = msg.topic.endsWith(\"/variable/vantage/sync\")\nconst TASK_SYNC = msg.topic.endsWith(\"/task/vantage/sync\")\nconst LOAD = msg.topic.endsWith(\"/load/vantage/set\")\nconst BLIND = msg.topic.endsWith(\"/blind/vantage/set\")\nconst TASK = msg.topic.endsWith(\"/task/vantage/set\")\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nvar Payload = ''\nvar Topic = ''\nvar vid = null\nvar trigger = \"BOOT\"\nvar Output = null\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n//FUNCTIONS\n\nfunction SetLoadSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETLOAD ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetBlindSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETBLIND ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetSensorSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETSENSOR ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetVariableSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETVARIABLE ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetTaskSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETTASK ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetLoad() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n\n    if (Payload == \"ON\") {\n        Payload = `LOAD ${vid} 100`\n    } else if (Payload == \"OFF\") {\n        Payload = `LOAD ${vid} 0`\n    } else if (parseInt(Payload) >= 0 && parseInt(Payload) <= 255) {\n        Payload = `LOAD ${vid} ${Math.round(parseInt(Payload) / 2.55)}`\n    } else {\n        Payload = null\n    }\n\n    return Payload\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetBlind() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n\n    if (Payload == \"OPEN\") {\n        Payload = `BLIND ${vid} ${Payload}`\n    } else if (Payload == \"STOP\") {\n        Payload = `BLIND ${vid} ${Payload}`\n    } else if (Payload == \"CLOSE\") {\n        Payload = `BLIND ${vid} ${Payload}`\n    } else if (parseInt(Payload) >= 0 && parseInt(Payload) <= 100) {\n        Payload = `BLIND ${vid} POS ${Payload}`\n    } else {\n        Payload = null\n    }\n\n    return Payload\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetTask() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n\n    if (Payload.search(/[on-off]/gi) !== -1) {\n        trigger = \"BOOT\"\n    } else if (parseInt(Payload) >= 0 && parseInt(Payload) <= 255) {\n        trigger = \"BOOT\"\n    } else if (Topic[1] == \"task\") {\n        trigger = \"BOOT\"\n    } else {\n        trigger = Topic[1]\n    }\n\n    return `TASK ${vid} ${trigger}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n//OUTPUT\n\nPayload = msg.payload\nTopic = msg.topic\n\nif (LOAD_SYNC) {\n    Output = SetLoadSync()\n} else if (BLIND_SYNC) {\n    Output = SetBlindSync()\n} else if (SENSOR_SYNC) {\n    Output = SetSensorSync()\n} else if (VARIABLE_SYNC) {\n    Output = SetVariableSync()\n} else if (TASK_SYNC) {\n    Output = SetTaskSync()\n} else if (LOAD) {\n    Output = SetLoad()\n} else if (BLIND) {\n    Output = SetBlind()\n} else if (TASK) {\n    Output = SetTask()\n} else if (ALL_SYNC) {\n    if (env.get(\"debug\")) { node.log('SYNC ALL') }\n    return [{ payload: 'SYNC' }, null]\n} else {\n    return null\n}\n\nif (!Output) {\n    if (env.get(\"debug\")) { node.log('Payload not match | ' + Payload) }\n    return null\n}\n\n//debug log\nif (env.get(\"debug\")) { node.log(Output) }\n\n//invia il messaggio\nreturn [null, { payload: Output }]",
+        "func": "/**\n * Vantage Infusion\n * Bruno Leonardi\n * 14/04/2023\n */\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n///////////////////////////////////////////////////////////////////////////////\n\n//messaggi obbligatori\nif (!msg.topic) return null\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nconst ALL_SYNC = msg.topic.endsWith(\"all/vantage/sync\")\nconst LOAD_SYNC = msg.topic.endsWith(\"/load/vantage/sync\")\nconst BLIND_SYNC = msg.topic.endsWith(\"/blind/vantage/sync\")\nconst SENSOR_SYNC = msg.topic.endsWith(\"/sensor/vantage/sync\")\nconst VARIABLE_SYNC = msg.topic.endsWith(\"/variable/vantage/sync\")\nconst TASK_SYNC = msg.topic.endsWith(\"/task/vantage/sync\")\nconst LOAD = msg.topic.endsWith(\"/load/vantage/set\")\nconst BLIND = msg.topic.endsWith(\"/blind/vantage/set\")\nconst TASK = msg.topic.endsWith(\"/task/vantage/set\")\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nvar Payload = ''\nvar Topic = ''\nvar vid = null\nvar trigger = \"BOOT\"\nvar Output = null\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n//FUNCTIONS\n\nfunction SetLoadSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETLOAD ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetBlindSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETBLIND ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetSensorSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETSENSOR ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetVariableSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETVARIABLE ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetTaskSync() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n    return `GETTASK ${vid}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetLoad() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n\n    if (Payload == \"ON\") {\n        Payload = `LOAD ${vid} 100`\n    } else if (Payload == \"OFF\") {\n        Payload = `LOAD ${vid} 0`\n    } else if (parseInt(Payload) >= 0 && parseInt(Payload) <= 255) {\n        Payload = `LOAD ${vid} ${Math.round(parseInt(Payload) / 2.55)}`\n    } else {\n        Payload = null\n    }\n\n    return Payload\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetBlind() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n\n    if (Payload == \"OPEN\") {\n        Payload = `BLIND ${vid} ${Payload}`\n    } else if (Payload == \"STOP\") {\n        Payload = `BLIND ${vid} ${Payload}`\n    } else if (Payload == \"CLOSE\") {\n        Payload = `BLIND ${vid} ${Payload}`\n    } else if (parseInt(Payload) >= 0 && parseInt(Payload) <= 100) {\n        Payload = `BLIND ${vid} POS ${Payload}`\n    } else {\n        Payload = null\n    }\n\n    return Payload\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n\nfunction SetTask() {\n    Topic = Topic.split(\"/\")\n    vid = Topic[0]\n\n    if (Payload.search(/[on-off]/gi) !== -1) {\n        trigger = \"BOOT\"\n    } else if (parseInt(Payload) >= 0 && parseInt(Payload) <= 255) {\n        trigger = \"BOOT\"\n    } else if (Topic[1] == \"task\") {\n        trigger = \"BOOT\"\n    } else {\n        trigger = Topic[1]\n    }\n\n    return `TASK ${vid} ${trigger}`\n}\n\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n////////////////////////////////////////////////////////////////////////\n//OUTPUT\n\nPayload = msg.payload\nTopic = msg.topic\n\nif (LOAD_SYNC) {\n    Output = SetLoadSync()\n} else if (BLIND_SYNC) {\n    Output = SetBlindSync()\n} else if (SENSOR_SYNC) {\n    Output = SetSensorSync()\n} else if (VARIABLE_SYNC) {\n    Output = SetVariableSync()\n} else if (TASK_SYNC) {\n    Output = SetTaskSync()\n} else if (LOAD) {\n    Output = SetLoad()\n} else if (BLIND) {\n    Output = SetBlind()\n} else if (TASK) {\n    Output = SetTask()\n} else if (ALL_SYNC) {\n    if (env.get(\"debug\")) { node.log('SYNC ALL') }\n    return [{ payload: 'SYNC' }, null]\n} else {\n    return null\n}\n\nif (!Output) {\n    if (env.get(\"debug\")) { node.log('Payload not match | ' + Payload) }\n    return null\n}\n\n//debug log\nif (env.get(\"debug\")) { node.log(Output) }\n\n//invia il messaggio\nreturn [null, { payload: Output }]",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -675,9 +528,7 @@
             [
                 "2e67021b6c114fff"
             ],
-            [
-                "6754d9766e396e81"
-            ]
+            []
         ],
         "inputLabels": [
             "OWN Event Session"
@@ -764,7 +615,7 @@
         "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": "10",
+        "onceDelay": "15",
         "topic": "",
         "payload": "SYNC",
         "payloadType": "str",
@@ -800,30 +651,6 @@
                 "2e67021b6c114fff"
             ]
         ]
-    },
-    {
-        "id": "6754d9766e396e81",
-        "type": "delay",
-        "z": "7ec2bb068e43779e",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "4",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 785,
-        "y": 190,
-        "wires": [
-            []
-        ],
-        "l": false
     },
     {
         "id": "c936c0dfeb10bce6",
@@ -867,11 +694,11 @@
         "l": false
     },
     {
-        "id": "76c0a1f3e982db75",
+        "id": "7e037080d9149b83",
         "type": "subflow:7ec2bb068e43779e",
-        "z": "6287171c991959fa",
+        "z": "99d9e9de.7f00a8",
         "name": "",
-        "x": 240,
+        "x": 460,
         "y": 390,
         "wires": [
             [],
